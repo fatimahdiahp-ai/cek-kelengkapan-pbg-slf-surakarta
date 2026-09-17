@@ -48,6 +48,20 @@
   .item-link .arrow { float: right; color: #0f6fbd; font-weight: 700; }
   .extra-note { margin-top: 14px; padding: 10px 12px; border-left: 4px solid #0f6fbd; background: #eef7ff; font-size: 13px; white-space: pre-wrap; border-radius: 0 6px 6px 0; }
   .meta { font-size: 12.5px; color: #63707d; margin-top: 14px; }
+  details.riwayat { margin-top: 18px; border-top: 1px dashed #dbe3ea; padding-top: 14px; }
+  details.riwayat summary { cursor: pointer; font-size: 13.5px; font-weight: 700; color: #0f6fbd; list-style: none; }
+  details.riwayat summary::-webkit-details-marker { display: none; }
+  details.riwayat summary::before { content: "▸ "; }
+  details.riwayat[open] summary::before { content: "▾ "; }
+  .riwayat-list { margin-top: 10px; display: grid; gap: 8px; }
+  .riwayat-item {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    border: 1px solid #e1e7ed; border-radius: 8px; padding: 9px 12px; font-size: 13px; background: #fafcfe;
+  }
+  .riwayat-tanggal { font-weight: 700; color: #33414d; min-width: 78px; }
+  .status-pill.mini { padding: 3px 9px; font-size: 11px; margin: 0; }
+  .riwayat-tag { font-size: 11px; font-weight: 700; color: #0f6fbd; background: #eef7ff; padding: 2px 8px; border-radius: 10px; }
+  .riwayat-count { color: #63707d; font-size: 12.5px; margin-left: auto; }
   footer.foot { margin-top: 16px; font-size: 12px; color: #63707d; padding: 0 4px; line-height: 1.6; }
 </style>
 </head>
@@ -80,7 +94,7 @@
   "use strict";
 
   // TODO (untuk admin): isi dengan URL Web App Google Apps Script yang sama dengan Tool 1, lalu publikasikan halaman ini.
-  var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2cTy5AwZ6Bu020BpXfJQlco_GTQ7Dhh3w6sxyFzvGG3ZLo7tKrno3-8X2AIonUkHp3w/exec";
+  var SCRIPT_URL = "PASTE_URL_WEB_APP_DISINI";
 
   // Judul singkat tiap kode kekurangan, dipakai untuk daftar di halaman ini.
   // Samakan/isi ulang sesuai daftar EXPLAIN pada panduan-pemohon-pbg-slf.html bila ada penambahan item baru.
@@ -150,14 +164,34 @@
           result.innerHTML = '<div class="empty">Data untuk No. Reg tersebut belum ditemukan. Periksa kembali penulisan No. Reg, atau verifikasi kelengkapan belum diinput oleh petugas.</div>';
           return;
         }
-        renderResult(json.data);
+        renderResult(json.data, json.history || [json.data]);
       })
       .catch(function () {
         result.innerHTML = '<div class="empty">Gagal memuat data. Periksa koneksi internet, lalu coba lagi.</div>';
       });
   }
 
-  function renderResult(data) {
+  function riwayatHtml(history) {
+    if (!history || history.length <= 1) return "";
+
+    var items = "";
+    for (var h = history.length - 1; h >= 0; h--) {
+      var r = history[h];
+      var rLengkap = isLengkap(r.status);
+      var isLatest = (h === history.length - 1);
+      items += '<div class="riwayat-item">' +
+        '<span class="riwayat-tanggal">' + formatTanggal(r.tanggal) + '</span>' +
+        '<span class="status-pill mini ' + (rLengkap ? "lengkap" : "belum") + '"><span class="dot"></span>' + (rLengkap ? "LENGKAP" : "BELUM LENGKAP") + "</span>" +
+        (isLatest ? '<span class="riwayat-tag">Terkini</span>' : "") +
+        (!rLengkap ? '<span class="riwayat-count">' + ((r.keys || []).length) + " poin kekurangan</span>" : "") +
+        "</div>";
+    }
+
+    return '<details class="riwayat"><summary>Lihat riwayat verifikasi (' + history.length + ' kali pemeriksaan)</summary>' +
+      '<div class="riwayat-list">' + items + "</div></details>";
+  }
+
+  function renderResult(data, history) {
     var lengkap = isLengkap(data.status);
 
     var html = '<div class="status-pill ' + (lengkap ? "lengkap" : "belum") + '">' +
@@ -189,6 +223,8 @@
         html += '<div class="extra-note">Catatan tambahan dari verifikator:\n' + escapeHtml(data.catatanTambahan) + "</div>";
       }
     }
+
+    html += riwayatHtml(history);
 
     html += '<div class="meta">No. Reg: ' + escapeHtml(data.noReg) + " &middot; Nama: " + escapeHtml(data.namaPemohon) + "</div>";
 
