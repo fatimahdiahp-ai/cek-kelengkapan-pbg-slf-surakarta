@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panduan Perbaikan Dokumen PBG & SLF - DPUPR Kota Surakarta</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f6f9;
+    color: #1f2937;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
+
+  .header {
+    background: #0f4c81;
+    color: white;
+    padding: 20px 24px;
+    border-radius: 12px 12px 0 0;
+  }
+  .header h1 { margin: 0 0 6px; font-size: 24px; }
+  .header p { margin: 0; opacity: .9; font-size: 14px; }
+  .card {
+    background: white;
+    border: 1px solid #dbe3ea;
+    border-top: none;
+    padding: 20px 24px;
+    border-radius: 0 0 12px 12px;
+  }
+  a { color: #0f6fbd; }
+
+  .p-tabs { display: flex; gap: 8px; margin: 22px 0 16px; }
+  .p-tab-btn {
+    background: #e8eef4; color: #243447; min-width: 110px;
+    border: 0; border-radius: 7px; padding: 9px 14px; cursor: pointer; font-weight: 700; font-size: 13px;
+  }
+  .p-tab-btn.active { background: #0f4c81; color: white; }
+  .p-tab-panel { display: none; }
+  .p-tab-panel.active { display: block; }
+
+  .status-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 700; letter-spacing: .02em;
+    background: #fdf1e6; border: 1px solid #f0c99a; color: #a35a10;
+    padding: 5px 12px; border-radius: 20px; margin-bottom: 10px;
+  }
+  .status-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: #c1631f; }
+
+  .p-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 10px; margin-top: 6px; }
+  .p-card {
+    text-align: left; background: #fff; border: 1px solid #dbe3ea; border-radius: 9px;
+    padding: 14px 16px; cursor: pointer; box-shadow: inset 3px 0 0 transparent;
+  }
+  .p-card:hover { border-color: #0f6fbd; }
+  .p-card.active { border-color: #0f4c81; background: #f3f8fd; box-shadow: inset 3px 0 0 #0f4c81; }
+  .p-card h3 { margin: 0 0 6px; font-size: 14.5px; color: #16324a; }
+  .p-card p { margin: 0; font-size: 12.5px; color: #63707d; }
+
+  .p-detail { margin-top: 20px; background: #fff; border: 1px solid #dbe3ea; border-radius: 12px; overflow: hidden; }
+  .p-detail-head { padding: 18px 22px 14px; border-bottom: 1px solid #dbe3ea; background: #f7fbff; }
+  .p-detail-head h2 { margin: 6px 0 8px; font-size: 19px; color: #0f4c81; }
+  .p-quote {
+    font-family: Consolas, "Courier New", monospace; font-size: 12.5px; color: #52606d;
+    background: #eef2f6; border-left: 3px solid #9fb3c4; padding: 8px 10px; border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .p-detail-head .problem { color: #3c4a58; font-size: 14px; max-width: 68ch; margin: 0; }
+
+  .p-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: #dbe3ea; }
+  @media (max-width: 680px) { .p-compare { grid-template-columns: 1fr; } }
+  .p-col { background: #fff; padding: 16px 18px; }
+  .p-col .p-label {
+    display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .03em; margin-bottom: 10px;
+  }
+  .p-col.before .p-label { color: #b42318; }
+  .p-col.after .p-label { color: #2f7a4d; }
+  .badge-x, .badge-check {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 17px; height: 17px; border-radius: 50%; font-size: .65rem; color: #fff; flex: none;
+  }
+  .badge-x { background: #b42318; }
+  .badge-check { background: #2f7a4d; }
+  .p-doc-mock { border: 1px solid #e1e7ed; border-radius: 6px; padding: 10px 12px; background: #fbfdff; }
+  .p-doc-line {
+    font-family: Consolas, "Courier New", monospace; font-size: 13px;
+    padding: 9px 10px; border-left: 3px solid #dbe3ea; border-radius: 3px; margin-bottom: 8px; color: #1f2937;
+  }
+  .p-doc-line:last-child { margin-bottom: 0; }
+  .p-doc-line.err { border-left-color: #b42318; background: #fdecea; }
+  .p-doc-line.fix { border-left-color: #2f7a4d; background: #e9f6ee; }
+  .p-doc-line .p-note { display: block; font-family: Arial, sans-serif; font-size: 12px; margin-top: 5px; font-style: italic; }
+  .p-doc-line.err .p-note { color: #b42318; }
+  .p-doc-line.fix .p-note { color: #2f7a4d; }
+
+  .p-tips { padding: 16px 22px 20px; border-top: 1px solid #dbe3ea; }
+  .p-tips h4 { margin: 0 0 8px; font-size: 14px; color: #0f4c81; }
+  .p-tips ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+  .p-tips li { display: flex; gap: 8px; font-size: 13.5px; color: #1f2937; }
+  .p-tips li::before { content: "\2192"; color: #c1631f; font-weight: 700; flex: none; }
+
+  footer.p-foot { margin-top: 20px; font-size: 12.5px; color: #63707d; padding: 0 4px 10px; }
+
+  @media (max-width: 640px) {
+    .container { padding: 0 12px 32px; }
+    .header, .card { border-radius: 0; }
+    .card, .header { padding-left: 14px; padding-right: 14px; }
+    .p-tabs { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>Panduan Perbaikan Dokumen PBG &amp; SLF</h1>
+    <p>DPUPR Kota Surakarta — untuk pemohon dengan status "Perbaikan Dokumen"</p>
+  </div>
+
+  <div class="card">
+    <span class="status-chip"><span class="dot"></span>STATUS: PERBAIKAN DOKUMEN</span>
+    <p style="margin:0; font-size:14px; color:#3c4a58;">Permohonan Anda dikembalikan untuk diperbaiki, bukan ditolak. Pilih kategori dan catatan yang Anda terima di bawah untuk melihat penjelasan dan contoh koreksinya. Daftar ini sama persis dengan daftar periksa yang digunakan verifikator, sehingga penjelasannya konsisten dengan catatan yang Anda terima.</p>
+  </div>
+
+  <div class="p-tabs">
+    <button type="button" class="p-tab-btn active" data-ptab="pbg">PBG</button>
+    <button type="button" class="p-tab-btn" data-ptab="slf">SLF</button>
+  </div>
+
+  <div id="p-pbg" class="p-tab-panel active">
+    <div class="p-grid" id="p-grid-pbg"></div>
+  </div>
+  <div id="p-slf" class="p-tab-panel">
+    <div class="p-grid" id="p-grid-slf"></div>
+  </div>
+
+  <div class="p-detail" id="p-detail"></div>
+
+  <footer class="p-foot">
+    Halaman ini bersifat edukatif dan menjelaskan poin-poin pada daftar periksa DPUPR Kota Surakarta. Jika catatan yang Anda terima berbeda redaksinya dari daftar ini, hubungi loket DPMPTSP atau DPUPR untuk kepastian.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =========================================================
+     SUMBER DATA — checklist & penjelasan (PBG/SLF)
+     ========================================================= */
+  var LINK_LANDING3 = "https://dpuprsim.surakartakota.simyandu.id/landing3/";
+
+  var CHECKLIST = {
+    pbg: [
+      { key: "sertifikat-lengkap", text: "unggah scan sertifikat tanah lengkap" },
+      { key: "beda-nama-lahan", text: "nama pemilik lahan berbeda dengan nama pemohon, lengkapi dengan keterangan pemanfaatan lahan" },
+      { key: "ktp-pemohon", text: "unggah KTP pemohon" },
+      { key: "perencana-ska-nonhunian", text: "untuk fungsi non hunian, melengkapi data perencana konstruksi bersertifikat keahlian bangunan gedung/arsitektur" },
+      { key: "perencana-s1-hunian", text: "untuk fungsi hunian melengkapi data perencana konstruksi minimal berijazah S1 Teknik Sipil/Arsitektur" },
+      { key: "sppl-nonhunian", text: "melengkapi dokumen lingkungan/SPPL dari OSS sesuai penapisan" },
+      { key: "kkkpr", text: "melengkapi KKKPR dari OSS" },
+      { key: "kajian-tata-ruang", text: "melengkapi kkpr dari oss, jika tidak terbit otomatis mengajukan permohonan kajian teknis tata ruang di " + LINK_LANDING3, link: LINK_LANDING3 },
+      { key: "intensitas-ruang", text: "rencanakan bangunan dengan mempertimbangkan batasan intensitas pemanfaatan ruang (KDB maks, KLB maks, KDH minimal, tinggi bangunan, GSJ, GSB), bisa konsultasikan KKKPR/Kajian Teknis Tata Ruang yang terbit ke bidang PRPBL DPUPR Kota Surakarta" },
+      { key: "plot-gsj-gsb", text: "plotkan GSJ dan GSB hasil kajian teknis tata ruang ke dalam gambar rencana tapak bangunan" },
+      { key: "tabel-perbandingan-intensitas", text: "untuk memastikan kesesuaian intensitas pemanfaatan ruang, tampilkan tabel perbandingan KDB, KLB, KDH, dan tinggi bangunan rencana dengan ketentuan pada KKKPR/Kajian Teknis Tata Ruang" },
+      { key: "spek-bahan", text: "melengkapi tabel spesifikasi teknis bahan yang digunakan" },
+      { key: "penyelidikan-tanah", text: "melengkapi data/laporan hasil penyelidikan tanah" },
+      { key: "detail-tangga", text: "melengkapi gambar detail struktur tangga dan plat lantai" },
+      { key: "gambar-mep", text: "melengkapi gambar rencana MEP (proteksi kebakaran, persampahan, drainase, air bersih, air kotor, dan jaringan listrik)" },
+      { key: "hitung-struktur", text: "melengkapi laporan perhitungan struktur bangunan" }
+    ],
+    slf: [
+      { key: "sertifikat-lengkap", text: "unggah scan sertifikat tanah lengkap" },
+      { key: "beda-nama-lahan", text: "nama pemilik lahan berbeda dengan nama pemohon, lengkapi dengan keterangan pemanfaatan lahan" },
+      { key: "ktp-pemohon", text: "unggah KTP pemohon" },
+      { key: "sk-imb-lama", text: "unggah data SK IMB/PBG/SLF lama jika ada, lengkap sampai dengan lampiran blokplan dan bukti pelunasan retribusi" },
+      { key: "pengkaji-ska-nonhunian", text: "untuk fungsi non hunian, melengkapi data pengkaji teknis bersertifikat keahlian bangunan gedung/arsitektur" },
+      { key: "pengkaji-s1-hunian", text: "untuk fungsi hunian melengkapi data pengkaji teknis minimal berijazah S1 Teknik Sipil/Arsitektur" },
+      { key: "daftar-simak", text: "melengkapi laporan/ceklis daftar simak SLF" },
+      { key: "pernyataan-laik-fungsi", text: "melengkapi surat pernyataan laik fungsi ditandatangan bermaterai oleh pengkaji teknis" },
+      { key: "kkkpr", text: "melengkapi KKKPR dari OSS" },
+      { key: "kajian-tata-ruang", text: "melengkapi kkpr dari oss, jika tidak terbit otomatis mengajukan permohonan kajian teknis tata ruang di " + LINK_LANDING3, link: LINK_LANDING3 },
+      { key: "spek-bahan", text: "melengkapi tabel spesifikasi teknis bahan yang digunakan" },
+      { key: "as-built", text: "melengkapi gambar as built arsitektur, struktur dan MEP" },
+      { key: "penyelidikan-tanah", text: "melengkapi data/laporan hasil penyelidikan tanah" },
+      { key: "detail-tangga", text: "melengkapi gambar detail struktur tangga dan plat lantai" },
+      { key: "hitung-struktur", text: "melengkapi laporan perhitungan struktur bangunan" }
+    ]
+  };
+
+  var EXPLAIN = {
+    "sertifikat-lengkap": {
+      title: "Scan sertifikat tanah belum lengkap",
+      problem: "Sertifikat tanah yang diunggah hanya sebagian halaman atau hasil pindai tidak jelas, sehingga verifikator tidak dapat memastikan keabsahan dan luas lahan.",
+      before: [{ t: "Sertifikat Hak Milik — 1 halaman depan saja", err: true, note: "Halaman catatan/mutasi tidak disertakan" }],
+      after: [{ t: "Sertifikat Hak Milik — seluruh halaman, termasuk catatan mutasi/balik nama", fix: true }],
+      tips: ["Pindai seluruh halaman sertifikat, termasuk halaman yang bertuliskan tidak ada catatan.", "Gunakan resolusi pindai yang cukup agar nomor hak dan luas tanah terbaca jelas.", "Unggah dalam format PDF, bukan foto kamera yang miring atau terpotong."]
+    },
+    "beda-nama-lahan": {
+      title: "Nama pemilik lahan berbeda dengan nama pemohon",
+      problem: "Nama pada sertifikat tanah tidak sama dengan nama pemohon, dan belum ada dokumen yang menjelaskan dasar pemanfaatan lahan tersebut oleh pemohon.",
+      before: [{ t: "Sertifikat: an. SITI AMINAH — Pemohon: AHMAD SAPUTRA", err: true, note: "Tidak ada keterangan pemanfaatan lahan" }],
+      after: [{ t: "+ Surat Keterangan Pemanfaatan Lahan (sewa/kuasa/waris), bermaterai, ditandatangani pemilik lahan", fix: true }],
+      tips: ["Sesuaikan jenis surat dengan hubungan sebenarnya: sewa pakai surat sewa-menyewa, kuasa pakai surat kuasa, waris pakai surat keterangan waris.", "Pastikan surat bermaterai dan mencantumkan jangka waktu pemanfaatan bila relevan.", "Ejaan nama pada surat harus identik dengan yang tertera di sertifikat dan KTP."]
+    },
+    "ktp-pemohon": {
+      title: "KTP pemohon belum diunggah",
+      problem: "Dokumen identitas (KTP) pemohon belum dilampirkan pada permohonan.",
+      before: [{ t: "(KTP pemohon belum diunggah)", err: true }],
+      after: [{ t: "+ KTP Pemohon — scan jelas, masih berlaku", fix: true }],
+      tips: ["Pastikan file KTP terbaca jelas, tidak buram, dan seluruh sisi tidak terpotong.", "Nama pada KTP harus sesuai dengan nama pemohon yang diinput di SIMBG."]
+    },
+    "perencana-ska-nonhunian": {
+      title: "Data perencana konstruksi belum bersertifikat keahlian (fungsi non hunian)",
+      problem: "Untuk bangunan fungsi non hunian (ruko, gedung usaha, fasilitas umum, dll), data perencana konstruksi yang diunggah belum mencantumkan Sertifikat Keahlian (SKA) bidang bangunan gedung/arsitektur.",
+      before: [{ t: "Perencana: Budi Santoso, S.T. (tanpa SKA)", err: true }],
+      after: [{ t: "Perencana: Budi Santoso, S.T. — SKA Arsitek No. xxxx, berlaku hingga [tanggal]", fix: true }],
+      tips: ["Lampirkan fotokopi SKA yang masih berlaku sesuai bidang pekerjaan (arsitektur/struktur).", "Periksa keaktifan SKA melalui sistem LPJK sebelum diunggah.", "Pastikan nama pada SKA sama dengan nama perencana yang tercantum di dokumen permohonan."]
+    },
+    "perencana-s1-hunian": {
+      title: "Data perencana konstruksi belum menunjukkan kualifikasi S1 (fungsi hunian)",
+      problem: "Untuk bangunan fungsi hunian, data perencana konstruksi belum menunjukkan kualifikasi pendidikan minimal S1 Teknik Sipil atau Arsitektur.",
+      before: [{ t: "Perencana: (nama saja, tanpa keterangan ijazah)", err: true }],
+      after: [{ t: "Perencana: [Nama], S.T. — Ijazah S1 Teknik Sipil dilampirkan", fix: true }],
+      tips: ["Lampirkan fotokopi ijazah S1 Teknik Sipil atau Arsitektur.", "Pastikan nama pada ijazah sesuai dengan nama yang tercantum sebagai perencana di dokumen."]
+    },
+    "sppl-nonhunian": {
+      title: "Dokumen lingkungan/SPPL belum diunggah",
+      problem: "Bangunan dengan fungsi tertentu wajib melampirkan dokumen lingkungan (SPPL, UKL-UPL, atau AMDAL sesuai skala kegiatan) yang diterbitkan melalui OSS, namun dokumen ini belum ada.",
+      before: [{ t: "(Dokumen lingkungan belum dilampirkan)", err: true }],
+      after: [{ t: "+ SPPL dari OSS — sesuai skala usaha/kegiatan", fix: true }],
+      tips: ["Ajukan SPPL atau dokumen lingkungan lain melalui portal OSS (oss.go.id) sebelum mengajukan PBG.", "Pastikan jenis dokumen lingkungan sesuai skala kegiatan (penapisan): SPPL untuk skala kecil, UKL-UPL/AMDAL untuk yang lebih besar."]
+    },
+    "kkkpr": {
+      title: "KKKPR dari OSS belum dilampirkan",
+      problem: "Konfirmasi Kesesuaian Kegiatan Pemanfaatan Ruang (KKKPR) dari OSS belum dilampirkan, padahal dokumen ini menjadi dasar penilaian kesesuaian rencana bangunan terhadap tata ruang.",
+      before: [{ t: "(KKKPR belum ada)", err: true }],
+      after: [{ t: "+ KKKPR terbit dari OSS, dilampirkan lengkap", fix: true }],
+      tips: ["Ajukan KKKPR melalui portal OSS (oss.go.id) sebelum mengajukan PBG/SLF.", "Pastikan lokasi dan luas lahan pada KKKPR sesuai dengan yang diajukan pada permohonan."]
+    },
+    "kajian-tata-ruang": {
+      title: "Kajian Teknis Tata Ruang belum dilampirkan",
+      problem: "KKKPR Anda tidak terbit otomatis dari OSS, sehingga perlu mengajukan permohonan Kajian Teknis Tata Ruang secara manual melalui portal DPUPR.",
+      before: [{ t: "(Kajian Teknis Tata Ruang belum dilampirkan)", err: true }],
+      after: [{ t: "+ Kajian Teknis Tata Ruang terbit, diajukan melalui portal resmi DPUPR", fix: true }],
+      tips: ["Ajukan permohonan melalui link: " + LINK_LANDING3 + " (memerlukan koneksi internet).", "Konsultasikan hasil kajian ke Bidang PRPBL DPUPR Kota Surakarta jika ada pertanyaan."]
+    },
+    "intensitas-ruang": {
+      title: "Rencana bangunan belum mempertimbangkan batasan intensitas pemanfaatan ruang",
+      problem: "Rencana bangunan belum memperhitungkan batasan intensitas pemanfaatan ruang (KDB maksimal, KLB maksimal, KDH minimal, tinggi bangunan, GSJ, GSB) yang berlaku di lokasi tersebut.",
+      before: [{ t: "KDB rencana 80%, KDH 5%, tanpa memperhitungkan GSB", err: true, note: "Melebihi batas yang ditetapkan KKKPR" }],
+      after: [{ t: "KDB rencana 58%, KDH 20%, GSJ & GSB sesuai KKKPR/Kajian Teknis Tata Ruang", fix: true }],
+      tips: ["Konsultasikan angka KDB maksimal, KLB maksimal, KDH minimal, tinggi bangunan, GSJ, dan GSB ke Bidang PRPBL DPUPR.", "Sesuaikan desain bangunan dengan batasan tersebut sebelum diajukan ulang."]
+    },
+    "plot-gsj-gsb": {
+      title: "GSJ/GSB belum diplotkan ke gambar rencana tapak",
+      problem: "Gambar rencana tapak/situasi belum menampilkan garis sempadan jalan (GSJ) dan garis sempadan bangunan (GSB) sesuai hasil KKKPR/Kajian Teknis Tata Ruang.",
+      before: [{ t: "Rencana tapak tanpa garis GSJ/GSB", err: true }],
+      after: [{ t: "Rencana tapak + garis GSJ & GSB terplot (GSJ ditarik dari batas lahan sesuai kajian teknis)", fix: true }],
+      tips: ["Gambarkan garis sempadan jalan (GSJ) dan garis sempadan bangunan (GSB) langsung pada denah situasi.", "Ambil angka GSJ/GSB dari dokumen KKKPR atau Kajian Teknis Tata Ruang yang sudah terbit.", "Periksa apakah ada bagian bangunan (misalnya balkon atau teras) yang menjorok ke area GSJ/GSB."]
+    },
+    "tabel-perbandingan-intensitas": {
+      title: "Tabel perbandingan intensitas pemanfaatan ruang belum ditampilkan",
+      problem: "Gambar rencana tapak belum menampilkan tabel yang membandingkan KDB, KLB, KDH, dan tinggi bangunan pada rencana dengan ketentuan yang tercantum di KKKPR/Kajian Teknis Tata Ruang.",
+      before: [{ t: "Rencana tapak tanpa tabel perbandingan intensitas", err: true }],
+      after: [{ t: "Tabel: Ketentuan KKKPR vs Rencana Bangunan — KDB, KLB, KDH, Tinggi Bangunan", fix: true }],
+      tips: ["Buat tabel dua kolom: 'Ketentuan KKKPR/Kajian Teknis' vs 'Rencana Bangunan' untuk tiap parameter.", "Cantumkan angka aktual (persentase/meter), bukan hanya keterangan 'sesuai'.", "Tempatkan tabel ini pada lembar gambar rencana tapak/situasi."]
+    },
+    "spek-bahan": {
+      title: "Tabel spesifikasi teknis bahan belum dicantumkan",
+      problem: "Dokumen teknis belum mencantumkan tabel spesifikasi bahan bangunan yang digunakan, seperti jenis, mutu, dan standar bahan.",
+      before: [{ t: "Kolom beton bertulang (tanpa spesifikasi bahan)", err: true }],
+      after: [{ t: "Kolom beton bertulang — mutu beton f'c 25 MPa, besi tulangan sesuai SNI, ukuran dicantumkan", fix: true }],
+      tips: ["Buat tabel berisi spesifikasi teknis pada tiap komponen utama: struktur, dinding, atap, dan lainnya.", "Gunakan standar SNI sebagai acuan mutu bahan yang dicantumkan."]
+    },
+    "penyelidikan-tanah": {
+      title: "Laporan penyelidikan tanah belum dilampirkan",
+      problem: "Data atau laporan hasil penyelidikan tanah (soil test/sondir) belum dilampirkan, padahal menjadi dasar perhitungan struktur pondasi.",
+      before: [{ t: "(Laporan penyelidikan tanah belum ada)", err: true }],
+      after: [{ t: "+ Laporan Penyelidikan Tanah/Sondir — dilampirkan lengkap", fix: true }],
+      tips: ["Penyelidikan tanah dapat dilakukan oleh laboratorium/konsultan geoteknik berpengalaman.", "Hasil penyelidikan tanah digunakan sebagai dasar perhitungan struktur pondasi, lampirkan bersama laporan struktur."]
+    },
+    "detail-tangga": {
+      title: "Gambar detail struktur tangga dan plat lantai belum lengkap",
+      problem: "Gambar detail struktur tangga dan/atau plat lantai belum dilampirkan atau belum cukup rinci untuk diverifikasi.",
+      before: [{ t: "Gambar struktur umum (tanpa detail tangga & plat lantai)", err: true }],
+      after: [{ t: "+ Gambar detail struktur tangga dan plat lantai — dimensi dan tulangan tercantum", fix: true }],
+      tips: ["Sertakan detail dimensi anak tangga, tebal plat lantai, dan penulangan.", "Gunakan skala detail (misalnya 1:20 atau 1:10) agar informasi terbaca jelas."]
+    },
+    "gambar-mep": {
+      title: "Gambar rencana MEP belum lengkap",
+      problem: "Gambar rencana MEP (mekanikal, elektrikal, plumbing) belum mencakup sistem proteksi kebakaran, titik persampahan, drainase, dan jaringan air/listrik.",
+      before: [{ t: "Gambar rencana — arsitektur & struktur saja", err: true, note: "Rencana MEP belum digambarkan" }],
+      after: [{ t: "+ Gambar rencana MEP: titik APAR/proteksi kebakaran, persampahan, drainase, air bersih, air kotor, jaringan listrik", fix: true }],
+      tips: ["Tampilkan titik APAR atau alat proteksi kebakaran lain pada denah.", "Tampilkan lokasi tempat sampah/TPS sementara pada rencana tapak.", "Sertakan jalur drainase, air bersih, air kotor, dan jaringan listrik pada gambar terpisah bila perlu."]
+    },
+    "hitung-struktur": {
+      title: "Laporan perhitungan struktur belum lengkap",
+      problem: "Laporan perhitungan struktur bangunan belum dilampirkan atau tidak lengkap, sehingga kekuatan struktur belum dapat diverifikasi.",
+      before: [{ t: "(Laporan perhitungan struktur belum ada, hanya gambar)", err: true }],
+      after: [{ t: "+ Laporan perhitungan struktur lengkap: beban, dimensi elemen, mutu material", fix: true }],
+      tips: ["Laporan disusun oleh perencana/pengkaji struktur yang kompeten di bidangnya.", "Sertakan asumsi pembebanan dan hasil analisis, bukan hanya kesimpulan dimensi akhir.", "Lampirkan sebagai dokumen terpisah dari gambar."]
+    },
+    "sk-imb-lama": {
+      title: "SK IMB/PBG/SLF lama belum lengkap",
+      problem: "Untuk bangunan yang sudah pernah memiliki izin sebelumnya, dokumen SK IMB/PBG/SLF lama belum dilampirkan secara lengkap, termasuk lampiran blokplan dan bukti pelunasan retribusi.",
+      before: [{ t: "SK IMB lama — hanya lembar depan, tanpa blokplan dan bukti bayar", err: true }],
+      after: [{ t: "SK IMB/PBG/SLF lama — lengkap dengan lampiran blokplan dan bukti pelunasan retribusi", fix: true }],
+      tips: ["Sertakan seluruh lampiran SK, bukan hanya halaman pertama.", "Jika dokumen fisik hilang, hubungi arsip DPUPR untuk meminta salinan.", "Ini terutama berlaku untuk bangunan yang direnovasi atau diajukan SLF setelah sebelumnya memiliki IMB/PBG."]
+    },
+    "pengkaji-ska-nonhunian": {
+      title: "Data pengkaji teknis belum bersertifikat keahlian (fungsi non hunian)",
+      problem: "Untuk bangunan fungsi non hunian, data pengkaji teknis SLF belum mencantumkan Sertifikat Keahlian (SKA) bidang bangunan gedung/arsitektur.",
+      before: [{ t: "Pengkaji Teknis: (nama saja, tanpa SKA)", err: true }],
+      after: [{ t: "Pengkaji Teknis: [Nama] — SKA Bangunan Gedung No. xxxx, berlaku hingga [tanggal]", fix: true }],
+      tips: ["Lampirkan fotokopi SKA yang masih berlaku sesuai bidang pemeriksaan.", "Periksa keaktifan SKA melalui sistem LPJK sebelum diunggah."]
+    },
+    "pengkaji-s1-hunian": {
+      title: "Data pengkaji teknis belum menunjukkan kualifikasi S1 (fungsi hunian)",
+      problem: "Untuk bangunan fungsi hunian, data pengkaji teknis SLF belum menunjukkan kualifikasi pendidikan minimal S1 Teknik Sipil atau Arsitektur.",
+      before: [{ t: "Pengkaji Teknis: (nama saja, tanpa keterangan ijazah)", err: true }],
+      after: [{ t: "Pengkaji Teknis: [Nama], S.T. — Ijazah S1 Teknik Sipil dilampirkan", fix: true }],
+      tips: ["Lampirkan fotokopi ijazah S1 Teknik Sipil atau Arsitektur.", "Pastikan nama pada ijazah sesuai dengan nama pengkaji teknis di dokumen."]
+    },
+    "daftar-simak": {
+      title: "Laporan/ceklis daftar simak SLF belum lengkap",
+      problem: "Laporan hasil pemeriksaan kelaikan fungsi (ceklis daftar simak) belum dilampirkan atau belum mencakup seluruh komponen bangunan.",
+      before: [{ t: "Ceklis daftar simak: struktur & arsitektur saja", err: true }],
+      after: [{ t: "Ceklis daftar simak lengkap: struktur, arsitektur, utilitas, proteksi kebakaran, aksesibilitas", fix: true }],
+      tips: ["Gunakan format ceklis daftar simak resmi yang berlaku.", "Pastikan setiap komponen diperiksa dan diberi kesimpulan laik/tidak laik secara eksplisit."]
+    },
+    "pernyataan-laik-fungsi": {
+      title: "Surat pernyataan laik fungsi belum bermaterai/ditandatangani",
+      problem: "Surat pernyataan laik fungsi dari pengkaji teknis belum dibubuhi materai dan/atau belum ditandatangani.",
+      before: [{ t: "Surat Pernyataan Laik Fungsi — draf, belum ditandatangani, belum bermaterai", err: true }],
+      after: [{ t: "Surat Pernyataan Laik Fungsi — bermaterai Rp10.000, ditandatangani pengkaji teknis", fix: true }],
+      tips: ["Pastikan yang menandatangani adalah pengkaji teknis yang namanya tercantum dalam laporan pemeriksaan.", "Tanda tangan membubuhi sebagian materai, bukan hanya di sampingnya."]
+    },
+    "as-built": {
+      title: "Gambar as built belum mencakup arsitektur, struktur, dan MEP",
+      problem: "Gambar as-built yang diunggah belum mencakup ketiga disiplin (arsitektur, struktur, MEP/mekanikal-elektrikal-plumbing), atau hanya salah satu.",
+      before: [{ t: "As Built Drawing: arsitektur saja", err: true, note: "Struktur dan MEP belum digambarkan" }],
+      after: [{ t: "As Built Drawing: arsitektur + struktur + MEP (mekanikal, elektrikal, plumbing) lengkap", fix: true }],
+      tips: ["Pastikan gambar as-built mencerminkan kondisi terbangun sesungguhnya untuk ketiga disiplin.", "Sertakan gambar instalasi listrik, plumbing, dan sistem MEP lain yang benar-benar terpasang di lapangan."]
+    }
+  };
+
+  /* =========================================================
+     RENDER
+     ========================================================= */
+  var pActiveCat = "pbg";
+  var pActiveKey = CHECKLIST.pbg[0].key;
+
+  var pTabButtons = document.querySelectorAll(".p-tab-btn");
+  var pTabPanels = document.querySelectorAll(".p-tab-panel");
+
+  for (var p = 0; p < pTabButtons.length; p++) {
+    pTabButtons[p].addEventListener("click", function () {
+      var target = this.getAttribute("data-ptab");
+      for (var a = 0; a < pTabButtons.length; a++) pTabButtons[a].classList.remove("active");
+      for (var b = 0; b < pTabPanels.length; b++) pTabPanels[b].classList.remove("active");
+      this.classList.add("active");
+      document.getElementById("p-" + target).classList.add("active");
+      pActiveCat = target;
+      pActiveKey = CHECKLIST[target][0].key;
+      renderPemohonGrid(target);
+      renderPemohonDetail();
+    }, false);
+  }
+
+  function renderPemohonGrid(catKey) {
+    var container = document.getElementById("p-grid-" + catKey);
+    var html = "";
+    CHECKLIST[catKey].forEach(function (item) {
+      var info = EXPLAIN[item.key];
+      var activeCls = (item.key === pActiveKey) ? " active" : "";
+      html += '<button type="button" class="p-card' + activeCls + '" data-pkey="' + item.key + '" data-pcat="' + catKey + '">' +
+        "<h3>" + info.title + "</h3>" +
+        "<p>" + info.problem.slice(0, 80) + "…</p>" +
+        "</button>";
+    });
+    container.innerHTML = html;
+
+    var cards = container.querySelectorAll(".p-card");
+    for (var c = 0; c < cards.length; c++) {
+      cards[c].addEventListener("click", function () {
+        pActiveKey = this.getAttribute("data-pkey");
+        pActiveCat = this.getAttribute("data-pcat");
+        markActiveCard();
+        renderPemohonDetail();
+      });
+    }
+  }
+
+  function markActiveCard() {
+    var allCards = document.querySelectorAll(".p-card");
+    for (var i = 0; i < allCards.length; i++) {
+      allCards[i].classList.toggle("active", allCards[i].getAttribute("data-pkey") === pActiveKey);
+    }
+  }
+
+  function docLinesHtml(lines) {
+    var html = "";
+    lines.forEach(function (l) {
+      var cls = l.err ? "err" : (l.fix ? "fix" : "");
+      var note = l.note ? '<span class="p-note">' + l.note + "</span>" : "";
+      html += '<div class="p-doc-line ' + cls + '">' + l.t + note + "</div>";
+    });
+    return html;
+  }
+
+  function renderPemohonDetail() {
+    var info = EXPLAIN[pActiveKey];
+    var originalItem = CHECKLIST[pActiveCat].filter(function (it) { return it.key === pActiveKey; })[0];
+    var quoteText = originalItem.text.charAt(0).toUpperCase() + originalItem.text.slice(1);
+    var detail = document.getElementById("p-detail");
+    detail.innerHTML =
+      '<div class="p-detail-head">' +
+        '<div class="p-quote">Bunyi catatan resmi: &ldquo;' + quoteText + '&rdquo;</div>' +
+        "<h2>" + info.title + "</h2>" +
+        '<p class="problem">' + info.problem + "</p>" +
+      "</div>" +
+      '<div class="p-compare">' +
+        '<div class="p-col before">' +
+          '<div class="p-label"><span class="badge-x">\u2715</span> Yang diunggah pemohon</div>' +
+          '<div class="p-doc-mock">' + docLinesHtml(info.before) + "</div>" +
+        "</div>" +
+        '<div class="p-col after">' +
+          '<div class="p-label"><span class="badge-check">\u2713</span> Setelah diperbaiki</div>' +
+          '<div class="p-doc-mock">' + docLinesHtml(info.after) + "</div>" +
+        "</div>" +
+      "</div>" +
+      '<div class="p-tips">' +
+        "<h4>Langkah perbaikan</h4>" +
+        "<ul>" + info.tips.map(function (t) { return "<li>" + t + "</li>"; }).join("") + "</ul>" +
+      "</div>";
+  }
+
+  renderPemohonGrid("pbg");
+  renderPemohonGrid("slf");
+
+  // Dukungan tautan langsung, misal: panduan.html?cat=pbg&key=hitung-struktur
+  (function applyDeepLink() {
+    var params = new URLSearchParams(window.location.search);
+    var qCat = params.get("cat");
+    var qKey = params.get("key");
+
+    if (qCat && (qCat === "pbg" || qCat === "slf") && qKey && EXPLAIN[qKey]) {
+      pActiveCat = qCat;
+      pActiveKey = qKey;
+
+      for (var a = 0; a < pTabButtons.length; a++) {
+        pTabButtons[a].classList.toggle("active", pTabButtons[a].getAttribute("data-ptab") === qCat);
+      }
+      for (var b = 0; b < pTabPanels.length; b++) {
+        pTabPanels[b].classList.toggle("active", pTabPanels[b].id === "p-" + qCat);
+      }
+      renderPemohonGrid(qCat);
+      markActiveCard();
+    }
+  })();
+
+  renderPemohonDetail();
+
+})();
+</script>
+</body>
+</html>

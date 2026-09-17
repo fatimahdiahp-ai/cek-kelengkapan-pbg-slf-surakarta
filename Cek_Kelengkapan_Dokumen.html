@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cek Kelengkapan Dokumen PBG/SLF - DPUPR Kota Surakarta</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f3f6f9; color: #1f2937; }
+  .container { max-width: 720px; margin: 24px auto; padding: 0 16px 40px; }
+  .header { background: #0f4c81; color: white; padding: 20px 24px; border-radius: 12px 12px 0 0; }
+  .header h1 { margin: 0 0 6px; font-size: 22px; }
+  .header p { margin: 0; opacity: .9; font-size: 13.5px; line-height: 1.5; }
+  .card { background: white; border: 1px solid #dbe3ea; border-top: none; padding: 20px 24px; }
+  .card:last-child { border-radius: 0 0 12px 12px; }
+  .scope-note {
+    margin-top: 12px; padding: 10px 12px; border-left: 4px solid #f0c99a;
+    background: #fdf1e6; font-size: 12.5px; line-height: 1.5; color: #7a4a12; border-radius: 0 6px 6px 0;
+  }
+  .search-row { display: flex; gap: 8px; margin-top: 4px; }
+  .search-row input {
+    flex: 1; border: 1px solid #b7c3cf; border-radius: 8px; padding: 11px 12px; font-size: 15px;
+  }
+  .search-row button {
+    border: 0; border-radius: 8px; padding: 11px 18px; background: #0f6fbd; color: white;
+    font-weight: 700; cursor: pointer; font-size: 14px;
+  }
+  .result { margin-top: 20px; }
+  .empty { color: #7c8b99; font-size: 14px; padding: 12px 0; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700;
+    padding: 5px 12px; border-radius: 20px; margin-bottom: 14px;
+  }
+  .status-pill.belum { background: #fdf1e6; border: 1px solid #f0c99a; color: #a35a10; }
+  .status-pill.lengkap { background: #e9f6ee; border: 1px solid #9fd6b6; color: #1f6b45; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .status-pill.belum .dot { background: #c1631f; }
+  .status-pill.lengkap .dot { background: #2f7a4d; }
+  .lengkap-box { background: #f7fbff; border: 1px solid #dbe3ea; border-radius: 10px; padding: 18px 20px; }
+  .lengkap-box p { margin: 0 0 10px; font-size: 14px; line-height: 1.6; }
+  .lengkap-box p:last-child { margin-bottom: 0; }
+  .item-list { display: grid; gap: 8px; margin-top: 6px; }
+  .item-link {
+    display: block; text-decoration: none; color: #1f2937; border: 1px solid #e1e7ed; border-radius: 8px;
+    padding: 12px 14px; background: #fff; font-size: 14px;
+  }
+  .item-link:hover { border-color: #0f6fbd; background: #f7fbff; }
+  .item-link .arrow { float: right; color: #0f6fbd; font-weight: 700; }
+  .extra-note { margin-top: 14px; padding: 10px 12px; border-left: 4px solid #0f6fbd; background: #eef7ff; font-size: 13px; white-space: pre-wrap; border-radius: 0 6px 6px 0; }
+  .meta { font-size: 12.5px; color: #63707d; margin-top: 14px; }
+  footer.foot { margin-top: 16px; font-size: 12px; color: #63707d; padding: 0 4px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Cek Kelengkapan Dokumen PBG/SLF</h1>
+    <p>Halaman ini hanya menampilkan hasil verifikasi kelengkapan dokumen tahap awal.</p>
+  </div>
+  <div class="card">
+    <label for="noRegInput" style="display:block; font-weight:700; font-size:14px; margin-bottom:6px;">Masukkan No. Reg / No. Agenda</label>
+    <div class="search-row">
+      <input type="text" id="noRegInput" placeholder="cth: 123/PBG/IX/2026">
+      <button type="button" id="btnCek">Cek</button>
+    </div>
+    <div class="scope-note">
+      Status yang ditampilkan hanya mengenai <strong>kelengkapan dokumen</strong> pada tahap verifikasi awal.
+      Setelah dokumen dinyatakan lengkap, proses selanjutnya (konsultasi teknis dan seterusnya)
+      <strong>tidak dilacak di halaman ini</strong> — informasinya akan disampaikan terpisah oleh petugas atau melalui SIMBG.
+    </div>
+    <div class="result" id="result"></div>
+  </div>
+  <footer class="foot">
+    Jika No. Reg tidak ditemukan atau ada pertanyaan di luar cakupan halaman ini, hubungi loket DPMPTSP atau DPUPR Kota Surakarta.
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // TODO (untuk admin): isi dengan URL Web App Google Apps Script yang sama dengan Tool 1, lalu publikasikan halaman ini.
+  var SCRIPT_URL = "PASTE_URL_WEB_APP_DISINI";
+
+  // Judul singkat tiap kode kekurangan, dipakai untuk daftar di halaman ini.
+  // Samakan/isi ulang sesuai daftar EXPLAIN pada panduan-pemohon-pbg-slf.html bila ada penambahan item baru.
+  var TITLES = {
+    "sertifikat-lengkap": "Scan sertifikat tanah belum lengkap",
+    "beda-nama-lahan": "Nama pemilik lahan berbeda dengan nama pemohon",
+    "ktp-pemohon": "KTP pemohon belum diunggah",
+    "perencana-ska-nonhunian": "Data perencana konstruksi belum bersertifikat keahlian (non hunian)",
+    "perencana-s1-hunian": "Data perencana konstruksi belum menunjukkan kualifikasi S1 (hunian)",
+    "sppl-nonhunian": "Dokumen lingkungan/SPPL belum diunggah",
+    "kkkpr": "KKKPR dari OSS belum dilampirkan",
+    "kajian-tata-ruang": "Kajian Teknis Tata Ruang belum dilampirkan",
+    "intensitas-ruang": "Rencana bangunan belum mempertimbangkan batasan intensitas ruang",
+    "plot-gsj-gsb": "GSJ/GSB belum diplotkan ke gambar rencana tapak",
+    "tabel-perbandingan-intensitas": "Tabel perbandingan intensitas ruang belum ditampilkan",
+    "spek-bahan": "Tabel spesifikasi teknis bahan belum dicantumkan",
+    "penyelidikan-tanah": "Laporan penyelidikan tanah belum dilampirkan",
+    "detail-tangga": "Gambar detail struktur tangga & plat lantai belum lengkap",
+    "gambar-mep": "Gambar rencana MEP belum lengkap",
+    "hitung-struktur": "Laporan perhitungan struktur belum lengkap",
+    "sk-imb-lama": "SK IMB/PBG/SLF lama belum lengkap",
+    "pengkaji-ska-nonhunian": "Data pengkaji teknis belum bersertifikat keahlian (non hunian)",
+    "pengkaji-s1-hunian": "Data pengkaji teknis belum menunjukkan kualifikasi S1 (hunian)",
+    "daftar-simak": "Laporan/ceklis daftar simak SLF belum lengkap",
+    "pernyataan-laik-fungsi": "Surat pernyataan laik fungsi belum bermaterai/ditandatangani",
+    "as-built": "Gambar as built belum mencakup arsitektur, struktur, dan MEP"
+  };
+
+  var PANDUAN_URL = "panduan-pemohon-pbg-slf.html";
+
+  var noRegInput = document.getElementById("noRegInput");
+  var btnCek = document.getElementById("btnCek");
+  var result = document.getElementById("result");
+
+  function escapeHtml(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function formatTanggal(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return String(d.getDate()).padStart(2, "0") + "/" + String(d.getMonth() + 1).padStart(2, "0") + "/" + d.getFullYear();
+  }
+
+  function isLengkap(status) {
+    return String(status || "").toLowerCase().indexOf("lengkap") === 0 || String(status || "").toLowerCase() === "lengkap";
+  }
+
+  function cekStatus() {
+    var noReg = noRegInput.value.trim();
+    if (noReg === "") {
+      result.innerHTML = '<div class="empty">Isi No. Reg terlebih dahulu.</div>';
+      return;
+    }
+    if (SCRIPT_URL.indexOf("PASTE_URL") === 0) {
+      result.innerHTML = '<div class="empty">Halaman belum dikonfigurasi oleh admin (URL Web App belum diisi).</div>';
+      return;
+    }
+
+    result.innerHTML = '<div class="empty">Memeriksa data...</div>';
+
+    fetch(SCRIPT_URL + "?noReg=" + encodeURIComponent(noReg))
+      .then(function (res) { return res.json(); })
+      .then(function (json) {
+        if (!json.found) {
+          result.innerHTML = '<div class="empty">Data untuk No. Reg tersebut belum ditemukan. Periksa kembali penulisan No. Reg, atau verifikasi kelengkapan belum diinput oleh petugas.</div>';
+          return;
+        }
+        renderResult(json.data);
+      })
+      .catch(function () {
+        result.innerHTML = '<div class="empty">Gagal memuat data. Periksa koneksi internet, lalu coba lagi.</div>';
+      });
+  }
+
+  function renderResult(data) {
+    var lengkap = isLengkap(data.status);
+
+    var html = '<div class="status-pill ' + (lengkap ? "lengkap" : "belum") + '">' +
+      '<span class="dot"></span>' + (lengkap ? "DOKUMEN LENGKAP" : "PERLU PERBAIKAN DOKUMEN") + "</div>";
+
+    if (lengkap) {
+      html += '<div class="lengkap-box">' +
+        "<p>Dokumen permohonan " + escapeHtml(data.jenisPermohonan) + " Anda telah dinyatakan <strong>lengkap</strong> pada tahap verifikasi awal (" + formatTanggal(data.lastUpdated || data.tanggal) + ").</p>" +
+        "<p>Proses selanjutnya (konsultasi teknis dan tahap substansi) berada di luar cakupan halaman ini. Informasi mengenai tahap tersebut akan disampaikan oleh petugas atau dapat dipantau melalui sistem SIMBG/OSS resmi.</p>" +
+        "</div>";
+    } else {
+      var keys = data.keys || [];
+      html += '<p style="font-size:14px; margin: 0 0 4px;">Berikut kekurangan dokumen yang perlu dilengkapi/diperbaiki (' + keys.length + ' poin):</p>';
+      html += '<div class="item-list">';
+      if (keys.length === 0) {
+        html += '<div class="empty">Tidak ada kode kekurangan standar tercatat. Lihat catatan tambahan di bawah.</div>';
+      } else {
+        for (var i = 0; i < keys.length; i++) {
+          var k = keys[i];
+          var title = TITLES[k] || k;
+          var cat = (data.jenisPermohonan || "").toLowerCase() === "slf" ? "slf" : "pbg";
+          html += '<a class="item-link" target="_blank" rel="noopener noreferrer" href="' + PANDUAN_URL + '?cat=' + cat + '&key=' + encodeURIComponent(k) + '">' +
+            escapeHtml(title) + '<span class="arrow">&rarr;</span></a>';
+        }
+      }
+      html += "</div>";
+
+      if (data.catatanTambahan) {
+        html += '<div class="extra-note">Catatan tambahan dari verifikator:\n' + escapeHtml(data.catatanTambahan) + "</div>";
+      }
+    }
+
+    html += '<div class="meta">No. Reg: ' + escapeHtml(data.noReg) + " &middot; Nama: " + escapeHtml(data.namaPemohon) + "</div>";
+
+    result.innerHTML = html;
+  }
+
+  btnCek.addEventListener("click", cekStatus, false);
+  noRegInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") cekStatus();
+  }, false);
+})();
+</script>
+</body>
+</html>
