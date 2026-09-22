@@ -294,7 +294,7 @@
       { key: "tabel-perbandingan-intensitas", text: "untuk memastikan kesesuaian intensitas pemanfaatan ruang, tampilkan tabel perbandingan KDB, KLB, KDH, dan tinggi bangunan rencana dengan ketentuan pada KKKPR/Kajian Teknis Tata Ruang" },
       { key: "spek-bahan", text: "melengkapi tabel spesifikasi teknis bahan yang digunakan" },
       { key: "penyelidikan-tanah", text: "melengkapi data/laporan hasil penyelidikan tanah" },
-      { key: "detail-tangga", text: "melengkapi gambar detail struktur tangga dan plat lantai" },
+      { key: "detail-struktur", text: "melengkapi gambar detail struktur" },
       { key: "gambar-mep", text: "melengkapi gambar rencana MEP (proteksi kebakaran, persampahan, drainase, air bersih, air kotor, dan jaringan listrik)" },
       { key: "hitung-struktur", text: "melengkapi laporan perhitungan struktur bangunan" }
     ],
@@ -312,7 +312,7 @@
       { key: "spek-bahan", text: "melengkapi tabel spesifikasi teknis bahan yang digunakan" },
       { key: "as-built", text: "melengkapi gambar as built arsitektur, struktur dan MEP" },
       { key: "penyelidikan-tanah", text: "melengkapi data/laporan hasil penyelidikan tanah" },
-      { key: "detail-tangga", text: "melengkapi gambar detail struktur tangga dan plat lantai" },
+      { key: "detail-struktur", text: "melengkapi gambar detail struktur" },
       { key: "hitung-struktur", text: "melengkapi laporan perhitungan struktur bangunan" }
     ]
   };
@@ -419,12 +419,12 @@
       after: [{ t: "+ Laporan Penyelidikan Tanah/Sondir — dilampirkan lengkap", fix: true }],
       tips: ["Penyelidikan tanah dapat dilakukan oleh laboratorium/konsultan geoteknik berpengalaman.", "Hasil penyelidikan tanah digunakan sebagai dasar perhitungan struktur pondasi, lampirkan bersama laporan struktur."]
     },
-    "detail-tangga": {
-      title: "Gambar detail struktur tangga dan plat lantai belum lengkap",
-      problem: "Gambar detail struktur tangga dan/atau plat lantai belum dilampirkan atau belum cukup rinci untuk diverifikasi.",
-      before: [{ t: "Gambar struktur umum (tanpa detail tangga & plat lantai)", err: true }],
-      after: [{ t: "+ Gambar detail struktur tangga dan plat lantai — dimensi dan tulangan tercantum", fix: true }],
-      tips: ["Sertakan detail dimensi anak tangga, tebal plat lantai, dan penulangan.", "Gunakan skala detail (misalnya 1:20 atau 1:10) agar informasi terbaca jelas."]
+    "detail-struktur": {
+      title: "Gambar detail struktur belum lengkap",
+      problem: "Gambar detail struktur belum dilampirkan atau belum cukup rinci untuk diverifikasi.",
+      before: [{ t: "Gambar struktur umum (tanpa detail struktur)", err: true }],
+      after: [{ t: "+ Gambar detail struktur — dimensi dan tulangan tercantum", fix: true }],
+      tips: ["Sertakan detail dimensi dan penulangan struktur dari pondasi, sloof, kolom, balok serta plat lantai/atap jika bangunan lebih dari satu lantai.", "Gunakan skala detail (misalnya 1:20 atau 1:10) agar informasi terbaca jelas."]
     },
     "gambar-mep": {
       title: "Gambar rencana MEP belum lengkap",
