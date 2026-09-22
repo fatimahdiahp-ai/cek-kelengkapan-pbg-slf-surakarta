@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -54,6 +54,63 @@
     padding: 14px 16px; cursor: pointer; box-shadow: inset 3px 0 0 transparent;
   }
   .p-card:hover { border-color: #0f6fbd; }
+  .selfcheck-banner {
+    background: #fdf1e6; border: 1px solid #f0c99a; border-radius: 8px;
+    padding: 12px 16px; font-size: 13px; line-height: 1.6; color: #7a4a12; margin-bottom: 16px;
+  }
+  .func-filter { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .func-filter-label { font-size: 13px; font-weight: 700; color: #33414d; }
+  .func-btn {
+    border: 1px solid #b7c3cf; background: white; border-radius: 20px; padding: 5px 14px;
+    font-size: 12.5px; cursor: pointer; color: #52616f;
+  }
+  .func-btn.active { background: #0f4c81; border-color: #0f4c81; color: white; }
+  .func-filter-hint { font-size: 11.5px; color: #8a97a3; }
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
+  @media (max-width: 720px) { .calc-grid { grid-template-columns: 1fr; } }
+  .calc-card { background: #fff; border: 1px solid #dbe3ea; border-radius: 10px; padding: 16px 18px; }
+  .calc-card h3 { margin: 0 0 12px; font-size: 14.5px; color: #16324a; }
+  .calc-field { margin-bottom: 12px; }
+  .calc-field label { display: block; font-size: 12.5px; font-weight: 700; color: #33414d; margin-bottom: 4px; }
+  .calc-field input {
+    width: 100%; border: 1px solid #b7c3cf; border-radius: 6px; padding: 8px 10px; font-size: 14px; box-sizing: border-box;
+  }
+  .calc-hint { font-size: 11.5px; color: #8a97a3; margin: 8px 0 0; line-height: 1.5; }
+  .calc-hint.calc-hint-gsj { color: #7a4a12; background: #fdf1e6; border: 1px solid #f0c99a; border-radius: 6px; padding: 7px 10px; margin: 6px 0 0; font-size: 12px; }
+  .btn-hitung {
+    border: 0; background: #0f4c81; color: white; font-weight: 700; font-size: 14px;
+    padding: 11px 22px; border-radius: 8px; cursor: pointer;
+  }
+  .btn-hitung:hover { background: #0d3d68; }
+  .calc-error { margin-top: 14px; background: #fdf1e6; border: 1px solid #f0c99a; color: #7a4a12; border-radius: 8px; padding: 10px 14px; font-size: 13px; }
+  .calc-table-wrap { margin-top: 18px; overflow-x: auto; }
+  .calc-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .calc-table th, .calc-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e5eaee; }
+  .calc-table th { color: #52616f; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+  .calc-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .calc-badge.ok { background: #e9f6ee; color: #1f6b45; border: 1px solid #9fd6b6; }
+  .calc-badge.bad { background: #fdeceb; color: #a3312a; border: 1px solid #f0aca6; }
+  .calc-badge.neutral { background: #eef2f6; color: #52616f; border: 1px solid #ccd6de; }
+  .calc-note { margin-top: 14px; font-size: 12px; color: #7a4a12; background: #fdf1e6; border: 1px solid #f0c99a; border-radius: 8px; padding: 10px 14px; line-height: 1.6; }
+  .selfcheck-progress {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .selfcheck-bar-track {
+    flex: 1; min-width: 160px; height: 8px; background: #e5eaee; border-radius: 6px; overflow: hidden;
+  }
+  .selfcheck-bar-fill { height: 100%; background: #2f7a4d; border-radius: 6px; transition: width .2s; }
+  .selfcheck-count { font-size: 13px; font-weight: 700; color: #33414d; white-space: nowrap; }
+  .selfcheck-reset {
+    border: 1px solid #b7c3cf; background: white; border-radius: 6px; padding: 5px 10px;
+    font-size: 12px; cursor: pointer; color: #52616f;
+  }
+  .selfcheck-reset:hover { border-color: #0f6fbd; color: #0f6fbd; }
+  .p-card { position: relative; }
+  .p-card.done { border-color: #9fd6b6; background: #f4fbf7; box-shadow: inset 3px 0 0 #2f7a4d; }
+  .p-card-check {
+    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; cursor: pointer;
+  }
+  .p-card h3 { padding-right: 26px; }
   .p-card.active { border-color: #0f4c81; background: #f3f8fd; box-shadow: inset 3px 0 0 #0f4c81; }
   .p-card h3 { margin: 0 0 6px; font-size: 14.5px; color: #16324a; }
   .p-card p { margin: 0; font-size: 12.5px; color: #63707d; }
@@ -94,6 +151,7 @@
   .p-doc-line .p-note { display: block; font-family: Arial, sans-serif; font-size: 12px; margin-top: 5px; font-style: italic; }
   .p-doc-line.err .p-note { color: #b42318; }
   .p-doc-line.fix .p-note { color: #2f7a4d; }
+  .p-doc-line-img img { display: block; max-width: 100%; height: auto; border-radius: 4px; margin-bottom: 6px; }
 
   .p-tips { padding: 16px 22px 20px; border-top: 1px solid #dbe3ea; }
   .p-tips h4 { margin: 0 0 8px; font-size: 14px; color: #0f4c81; }
@@ -127,13 +185,82 @@
   <div class="p-tabs">
     <button type="button" class="p-tab-btn active" data-ptab="pbg">PBG</button>
     <button type="button" class="p-tab-btn" data-ptab="slf">SLF</button>
+    <button type="button" class="p-tab-btn" data-ptab="kalkulator">Kalkulator Intensitas</button>
+  </div>
+
+  <div class="selfcheck-banner">
+    <strong>Cek mandiri (self-screening):</strong> centang kotak pada tiap kartu yang dokumennya sudah Anda siapkan.
+    Ini hanya alat bantu pribadi di perangkat Anda — <strong>bukan verifikasi resmi</strong> dan tidak dikirim ke petugas manapun.
+    Verifikasi resmi tetap dilakukan oleh petugas saat berkas Anda diperiksa.
+  </div>
+
+  <div class="func-filter">
+    <span class="func-filter-label">Fungsi bangunan Anda:</span>
+    <button type="button" class="func-btn active" data-func="all">Semua</button>
+    <button type="button" class="func-btn" data-func="hunian">Hunian</button>
+    <button type="button" class="func-btn" data-func="nonhunian">Non-Hunian</button>
+    <span class="func-filter-hint">(menyaring item yang khusus berlaku untuk salah satu jenis)</span>
   </div>
 
   <div id="p-pbg" class="p-tab-panel active">
+    <div class="selfcheck-progress" id="progress-pbg"></div>
     <div class="p-grid" id="p-grid-pbg"></div>
   </div>
   <div id="p-slf" class="p-tab-panel">
+    <div class="selfcheck-progress" id="progress-slf"></div>
     <div class="p-grid" id="p-grid-slf"></div>
+  </div>
+
+  <div id="p-kalkulator" class="p-tab-panel">
+    <div class="selfcheck-banner">
+      <strong>Kalkulator simulasi, bukan sumber ketentuan resmi.</strong> Alat ini hanya menghitung KDB/KLB/KDH dari
+      angka yang <strong>Anda masukkan sendiri</strong>, lalu membandingkannya dengan angka ketentuan yang juga Anda
+      masukkan sendiri dari KKKPR/Kajian Teknis Tata Ruang Anda. Kalkulator ini <strong>tidak menyimpan atau mengetahui</strong>
+      ketentuan resmi untuk lokasi tertentu — selalu rujuk KKKPR asli Anda untuk angka yang berlaku.
+    </div>
+
+    <div class="calc-grid">
+      <div class="calc-card">
+        <h3>Data rencana Anda</h3>
+        <div class="calc-field">
+          <label for="calcLuasLahan">Luas lahan (m²)</label>
+          <input type="number" id="calcLuasLahan" min="0" step="0.01" placeholder="cth: 200">
+          <p class="calc-hint calc-hint-gsj"><strong>Catatan:</strong> isi dengan <strong>luas lahan bebas GSJ</strong>, yaitu luas lahan setelah dikurangi bagian lahan yang terkena GSJ, sesuai angka yang tertera pada Kajian Teknis/informasi dari Tata Ruang (KKKPR). Jika sebagian lahan terkena GSJ, jangan gunakan luas menurut sertifikat.</p>
+        </div>
+        <div class="calc-field">
+          <label for="calcLuasDasar">Luas lantai dasar bangunan (m²)</label>
+          <input type="number" id="calcLuasDasar" min="0" step="0.01" placeholder="cth: 120">
+        </div>
+        <div class="calc-field">
+          <label for="calcLuasTotal">Total luas seluruh lantai (m²)</label>
+          <input type="number" id="calcLuasTotal" min="0" step="0.01" placeholder="cth: 240 (untuk 2 lantai)">
+        </div>
+        <div class="calc-field">
+          <label for="calcLuasRTH">Luas ruang terbuka hijau/resapan (m²)</label>
+          <input type="number" id="calcLuasRTH" min="0" step="0.01" placeholder="cth: 30">
+        </div>
+      </div>
+
+      <div class="calc-card">
+        <h3>Ketentuan dari KKKPR Anda</h3>
+        <div class="calc-field">
+          <label for="calcKdbMax">KDB maksimal (%)</label>
+          <input type="number" id="calcKdbMax" min="0" max="100" step="0.1" placeholder="cth: 60">
+        </div>
+        <div class="calc-field">
+          <label for="calcKlbMax">KLB maksimal</label>
+          <input type="number" id="calcKlbMax" min="0" step="0.01" placeholder="cth: 1.2">
+        </div>
+        <div class="calc-field">
+          <label for="calcKdhMin">KDH minimal (%)</label>
+          <input type="number" id="calcKdhMin" min="0" max="100" step="0.1" placeholder="cth: 10">
+        </div>
+        <p class="calc-hint">Isi sesuai angka yang tertera pada KKKPR/Kajian Teknis Tata Ruang Anda. Kosongkan bila belum punya angkanya — kalkulator tetap menampilkan hasil hitungan rencana Anda tanpa status kesesuaian.</p>
+      </div>
+    </div>
+
+    <button type="button" class="btn-hitung" id="btnHitungIntensitas">Hitung &amp; Bandingkan</button>
+    <div id="calcResult"></div>
   </div>
 
   <div class="p-detail" id="p-detail"></div>
@@ -157,9 +284,9 @@
       { key: "sertifikat-lengkap", text: "unggah scan sertifikat tanah lengkap" },
       { key: "beda-nama-lahan", text: "nama pemilik lahan berbeda dengan nama pemohon, lengkapi dengan keterangan pemanfaatan lahan" },
       { key: "ktp-pemohon", text: "unggah KTP pemohon" },
-      { key: "perencana-ska-nonhunian", text: "untuk fungsi non hunian, melengkapi data perencana konstruksi bersertifikat keahlian bangunan gedung/arsitektur" },
-      { key: "perencana-s1-hunian", text: "untuk fungsi hunian melengkapi data perencana konstruksi minimal berijazah S1 Teknik Sipil/Arsitektur" },
-      { key: "sppl-nonhunian", text: "melengkapi dokumen lingkungan/SPPL dari OSS sesuai penapisan" },
+      { key: "perencana-ska-nonhunian", scope: "nonhunian", text: "untuk fungsi non hunian, melengkapi data perencana konstruksi bersertifikat keahlian bangunan gedung/arsitektur" },
+      { key: "perencana-s1-hunian", scope: "hunian", text: "untuk fungsi hunian melengkapi data perencana konstruksi minimal berijazah S1 Teknik Sipil/Arsitektur" },
+      { key: "sppl-nonhunian", scope: "nonhunian", text: "melengkapi dokumen lingkungan/SPPL dari OSS sesuai penapisan" },
       { key: "kkkpr", text: "melengkapi KKKPR dari OSS" },
       { key: "kajian-tata-ruang", text: "melengkapi kkpr dari oss, jika tidak terbit otomatis mengajukan permohonan kajian teknis tata ruang di " + LINK_LANDING3, link: LINK_LANDING3 },
       { key: "intensitas-ruang", text: "rencanakan bangunan dengan mempertimbangkan batasan intensitas pemanfaatan ruang (KDB maks, KLB maks, KDH minimal, tinggi bangunan, GSJ, GSB), bisa konsultasikan KKKPR/Kajian Teknis Tata Ruang yang terbit ke bidang PRPBL DPUPR Kota Surakarta" },
@@ -176,8 +303,8 @@
       { key: "beda-nama-lahan", text: "nama pemilik lahan berbeda dengan nama pemohon, lengkapi dengan keterangan pemanfaatan lahan" },
       { key: "ktp-pemohon", text: "unggah KTP pemohon" },
       { key: "sk-imb-lama", text: "unggah data SK IMB/PBG/SLF lama jika ada, lengkap sampai dengan lampiran blokplan dan bukti pelunasan retribusi" },
-      { key: "pengkaji-ska-nonhunian", text: "untuk fungsi non hunian, melengkapi data pengkaji teknis bersertifikat keahlian bangunan gedung/arsitektur" },
-      { key: "pengkaji-s1-hunian", text: "untuk fungsi hunian melengkapi data pengkaji teknis minimal berijazah S1 Teknik Sipil/Arsitektur" },
+      { key: "pengkaji-ska-nonhunian", scope: "nonhunian", text: "untuk fungsi non hunian, melengkapi data pengkaji teknis bersertifikat keahlian bangunan gedung/arsitektur" },
+      { key: "pengkaji-s1-hunian", scope: "hunian", text: "untuk fungsi hunian melengkapi data pengkaji teknis minimal berijazah S1 Teknik Sipil/Arsitektur" },
       { key: "daftar-simak", text: "melengkapi laporan/ceklis daftar simak SLF" },
       { key: "pernyataan-laik-fungsi", text: "melengkapi surat pernyataan laik fungsi ditandatangan bermaterai oleh pengkaji teknis" },
       { key: "kkkpr", text: "melengkapi KKKPR dari OSS" },
@@ -189,6 +316,16 @@
       { key: "hitung-struktur", text: "melengkapi laporan perhitungan struktur bangunan" }
     ]
   };
+
+  /* =========================================================
+     CARA MENAMBAHKAN GAMBAR CONTOH DOKUMEN (opsional, per item)
+     Tambahkan properti img pada objek before/after, contoh:
+     before: [{ img: "assets/sertifikat-lengkap-before.jpg", t: "Sertifikat Hak Milik — 1 halaman depan saja", err: true }]
+     after:  [{ img: "assets/sertifikat-lengkap-after.jpg",  t: "Sertifikat Hak Milik — seluruh halaman",       fix: true }]
+     - Simpan file gambar di folder "assets/" pada lokasi yang sama dengan file HTML ini.
+     - Jika file img belum ada / gagal dimuat, otomatis kembali menampilkan teks (t) sebagai fallback.
+     - Gunakan dokumen CONTOH/FIKTIF, bukan dokumen asli pemohon (lihat catatan privasi).
+     ========================================================= */
 
   var EXPLAIN = {
     "sertifikat-lengkap": {
@@ -363,20 +500,94 @@
       for (var b = 0; b < pTabPanels.length; b++) pTabPanels[b].classList.remove("active");
       this.classList.add("active");
       document.getElementById("p-" + target).classList.add("active");
-      pActiveCat = target;
-      pActiveKey = CHECKLIST[target][0].key;
-      renderPemohonGrid(target);
-      renderPemohonDetail();
+      if (target === "pbg" || target === "slf") {
+        pActiveCat = target;
+        pActiveKey = CHECKLIST[target][0].key;
+        renderPemohonGrid(target);
+        renderPemohonDetail();
+      }
+    }, false);
+  }
+
+  var SELFCHECK_KEY = "pbg_slf_selfcheck_v1";
+  var pFuncFilter = "all";
+
+  var funcButtons = document.querySelectorAll(".func-btn");
+  for (var fb = 0; fb < funcButtons.length; fb++) {
+    funcButtons[fb].addEventListener("click", function () {
+      pFuncFilter = this.getAttribute("data-func");
+      for (var g = 0; g < funcButtons.length; g++) funcButtons[g].classList.remove("active");
+      this.classList.add("active");
+      renderPemohonGrid("pbg");
+      renderPemohonGrid("slf");
+    }, false);
+  }
+
+  function itemMatchesFilter(item) {
+    return pFuncFilter === "all" || !item.scope || item.scope === pFuncFilter;
+  }
+
+  function getSelfCheckData() {
+    try {
+      var raw = localStorage.getItem(SELFCHECK_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function setSelfCheckDone(catKey, itemKey, done) {
+    var data = getSelfCheckData();
+    var storeKey = catKey + ":" + itemKey;
+    if (done) {
+      data[storeKey] = true;
+    } else {
+      delete data[storeKey];
+    }
+    try { localStorage.setItem(SELFCHECK_KEY, JSON.stringify(data)); } catch (e) {}
+  }
+
+  function isSelfCheckDone(catKey, itemKey) {
+    var data = getSelfCheckData();
+    return !!data[catKey + ":" + itemKey];
+  }
+
+  function renderProgress(catKey) {
+    var el = document.getElementById("progress-" + catKey);
+    if (!el) return;
+    var relevantItems = CHECKLIST[catKey].filter(itemMatchesFilter);
+    var total = relevantItems.length;
+    var data = getSelfCheckData();
+    var done = 0;
+    relevantItems.forEach(function (item) {
+      if (data[catKey + ":" + item.key]) done++;
+    });
+    var pct = total ? Math.round((done / total) * 100) : 0;
+
+    el.innerHTML =
+      '<div class="selfcheck-bar-track"><div class="selfcheck-bar-fill" style="width:' + pct + '%;"></div></div>' +
+      '<span class="selfcheck-count">' + done + " dari " + total + " item ditandai siap</span>" +
+      '<button type="button" class="selfcheck-reset" id="reset-' + catKey + '">Reset tanda</button>';
+
+    document.getElementById("reset-" + catKey).addEventListener("click", function () {
+      if (!window.confirm("Hapus semua tanda cek mandiri untuk kategori ini?")) return;
+      var data2 = getSelfCheckData();
+      CHECKLIST[catKey].forEach(function (item) { delete data2[catKey + ":" + item.key]; });
+      try { localStorage.setItem(SELFCHECK_KEY, JSON.stringify(data2)); } catch (e) {}
+      renderPemohonGrid(catKey);
     }, false);
   }
 
   function renderPemohonGrid(catKey) {
     var container = document.getElementById("p-grid-" + catKey);
     var html = "";
-    CHECKLIST[catKey].forEach(function (item) {
+    CHECKLIST[catKey].filter(itemMatchesFilter).forEach(function (item) {
       var info = EXPLAIN[item.key];
       var activeCls = (item.key === pActiveKey) ? " active" : "";
-      html += '<button type="button" class="p-card' + activeCls + '" data-pkey="' + item.key + '" data-pcat="' + catKey + '">' +
+      var doneCls = isSelfCheckDone(catKey, item.key) ? " done" : "";
+      var checked = isSelfCheckDone(catKey, item.key) ? " checked" : "";
+      html += '<button type="button" class="p-card' + activeCls + doneCls + '" data-pkey="' + item.key + '" data-pcat="' + catKey + '">' +
+        '<input type="checkbox" class="p-card-check" data-checkkey="' + item.key + '" data-checkcat="' + catKey + '" title="Tandai sudah saya siapkan"' + checked + '>' +
         "<h3>" + info.title + "</h3>" +
         "<p>" + info.problem.slice(0, 80) + "…</p>" +
         "</button>";
@@ -392,6 +603,22 @@
         renderPemohonDetail();
       });
     }
+
+    var checks = container.querySelectorAll(".p-card-check");
+    for (var k = 0; k < checks.length; k++) {
+      checks[k].addEventListener("click", function (e) {
+        e.stopPropagation();
+      });
+      checks[k].addEventListener("change", function () {
+        var ck = this.getAttribute("data-checkkey");
+        var cc = this.getAttribute("data-checkcat");
+        setSelfCheckDone(cc, ck, this.checked);
+        this.closest(".p-card").classList.toggle("done", this.checked);
+        renderProgress(cc);
+      });
+    }
+
+    renderProgress(catKey);
   }
 
   function markActiveCard() {
@@ -406,7 +633,17 @@
     lines.forEach(function (l) {
       var cls = l.err ? "err" : (l.fix ? "fix" : "");
       var note = l.note ? '<span class="p-note">' + l.note + "</span>" : "";
-      html += '<div class="p-doc-line ' + cls + '">' + l.t + note + "</div>";
+
+      if (l.img) {
+        // Jika gambar contoh dokumen sudah tersedia, tampilkan foto + keterangan singkat.
+        html += '<div class="p-doc-line ' + cls + ' p-doc-line-img">' +
+          '<img src="' + l.img + '" alt="' + (l.alt || "Contoh dokumen") + '" loading="lazy" ' +
+          'onerror="this.parentElement.innerHTML=\'' + (l.t ? l.t.replace(/'/g, "\\'") : "Contoh gambar belum tersedia") + '\'">' +
+          (l.t ? '<span class="p-note" style="font-style:normal;">' + l.t + "</span>" : "") + note +
+          "</div>";
+      } else {
+        html += '<div class="p-doc-line ' + cls + '">' + l.t + note + "</div>";
+      }
     });
     return html;
   }
@@ -461,6 +698,72 @@
       markActiveCard();
     }
   })();
+
+  function buildCalcRow(label, aktualDisplay, ketentuanDisplay, sesuai, selisihDisplay) {
+    var statusHtml;
+    if (sesuai === null) {
+      statusHtml = '<span class="calc-badge neutral">Isi ketentuan untuk dibandingkan</span>';
+    } else if (sesuai) {
+      statusHtml = '<span class="calc-badge ok">Sesuai</span>';
+    } else {
+      statusHtml = '<span class="calc-badge bad">Tidak sesuai (selisih ' + selisihDisplay + ')</span>';
+    }
+    return "<tr><td>" + label + "</td><td>" + aktualDisplay + "</td><td>" + ketentuanDisplay + "</td><td>" + statusHtml + "</td></tr>";
+  }
+
+  var btnHitungIntensitas = document.getElementById("btnHitungIntensitas");
+  if (btnHitungIntensitas) {
+    btnHitungIntensitas.addEventListener("click", function () {
+      var resultEl = document.getElementById("calcResult");
+
+      var luasLahan = parseFloat(document.getElementById("calcLuasLahan").value);
+      var luasDasar = parseFloat(document.getElementById("calcLuasDasar").value);
+      var luasTotal = parseFloat(document.getElementById("calcLuasTotal").value);
+      var luasRTH = parseFloat(document.getElementById("calcLuasRTH").value);
+      var kdbMax = parseFloat(document.getElementById("calcKdbMax").value);
+      var klbMax = parseFloat(document.getElementById("calcKlbMax").value);
+      var kdhMin = parseFloat(document.getElementById("calcKdhMin").value);
+
+      if (!luasLahan || luasLahan <= 0 || isNaN(luasLahan)) {
+        resultEl.innerHTML = '<div class="calc-error">Isi Luas lahan terlebih dahulu (harus lebih besar dari 0).</div>';
+        return;
+      }
+
+      var rows = [];
+
+      if (!isNaN(luasDasar) && luasDasar >= 0) {
+        var kdbAktual = (luasDasar / luasLahan) * 100;
+        var kdbSesuai = isNaN(kdbMax) ? null : (kdbAktual <= kdbMax);
+        var kdbSelisih = isNaN(kdbMax) ? "" : (kdbAktual - kdbMax).toFixed(2) + " poin %";
+        rows.push(buildCalcRow("KDB — Koefisien Dasar Bangunan", kdbAktual.toFixed(2) + "%", isNaN(kdbMax) ? "-" : kdbMax + "%", kdbSesuai, kdbSelisih));
+      }
+
+      if (!isNaN(luasTotal) && luasTotal >= 0) {
+        var klbAktual = luasTotal / luasLahan;
+        var klbSesuai = isNaN(klbMax) ? null : (klbAktual <= klbMax);
+        var klbSelisih = isNaN(klbMax) ? "" : (klbAktual - klbMax).toFixed(2);
+        rows.push(buildCalcRow("KLB — Koefisien Lantai Bangunan", klbAktual.toFixed(2), isNaN(klbMax) ? "-" : String(klbMax), klbSesuai, klbSelisih));
+      }
+
+      if (!isNaN(luasRTH) && luasRTH >= 0) {
+        var kdhAktual = (luasRTH / luasLahan) * 100;
+        var kdhSesuai = isNaN(kdhMin) ? null : (kdhAktual >= kdhMin);
+        var kdhSelisih = isNaN(kdhMin) ? "" : (kdhAktual - kdhMin).toFixed(2) + " poin %";
+        rows.push(buildCalcRow("KDH — Koefisien Daerah Hijau", kdhAktual.toFixed(2) + "%", isNaN(kdhMin) ? "-" : kdhMin + "%", kdhSesuai, kdhSelisih));
+      }
+
+      if (rows.length === 0) {
+        resultEl.innerHTML = '<div class="calc-error">Isi minimal salah satu data luas bangunan (luas lantai dasar, total luas lantai, atau luas RTH) untuk dihitung.</div>';
+        return;
+      }
+
+      resultEl.innerHTML =
+        '<div class="calc-table-wrap"><table class="calc-table"><thead><tr>' +
+        "<th>Indikator</th><th>Rencana Anda</th><th>Ketentuan KKKPR</th><th>Status</th>" +
+        "</tr></thead><tbody>" + rows.join("") + "</tbody></table></div>" +
+        '<div class="calc-note">Perhitungan ini murni berdasarkan angka yang Anda masukkan sendiri. Bukan pengganti KKKPR resmi — selalu rujuk angka ketentuan yang tertera pada dokumen KKKPR/Kajian Teknis Tata Ruang Anda yang berlaku untuk lokasi ini.</div>';
+    }, false);
+  }
 
   renderPemohonDetail();
 
