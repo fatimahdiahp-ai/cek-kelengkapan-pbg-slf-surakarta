@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -74,9 +74,14 @@
   <div class="card">
     <label for="noRegInput" style="display:block; font-weight:700; font-size:14px; margin-bottom:6px;">Masukkan No. Reg / No. Agenda</label>
     <div class="search-row">
-      <input type="text" id="noRegInput" placeholder="cth: 123/PBG/IX/2026">
+      <input type="text" id="noRegInput" placeholder="cth: 123/PBG/IX/2026" autocomplete="off">
+    </div>
+    <label for="nikInput" style="display:block; font-weight:700; font-size:14px; margin:14px 0 6px;">6 digit terakhir NIK pemilik bangunan</label>
+    <div class="search-row">
+      <input type="text" id="nikInput" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="cth: 010001">
       <button type="button" id="btnCek">Cek</button>
     </div>
+    <div class="meta" style="margin-top:6px;">Sesuai KTP pemilik bangunan yang diunggah pada permohonan. Cukup 6 angka terakhir, bukan NIK lengkap.</div>
     <div class="scope-note">
       Status yang ditampilkan hanya mengenai <strong>kelengkapan dokumen</strong> pada tahap verifikasi awal.
       Setelah dokumen dinyatakan lengkap, proses selanjutnya (konsultasi teknis dan seterusnya)
@@ -126,6 +131,7 @@
   var PANDUAN_URL = "panduan-pemohon-pbg-slf-final.html";
 
   var noRegInput = document.getElementById("noRegInput");
+  var nikInput = document.getElementById("nikInput");
   var btnCek = document.getElementById("btnCek");
   var result = document.getElementById("result");
 
@@ -155,13 +161,23 @@
       return;
     }
 
+    var nik = nikInput.value.replace(/\D/g, "");
+    if (nik.length !== 6) {
+      result.innerHTML = '<div class="empty">Isi 6 digit terakhir NIK pemilik bangunan.</div>';
+      return;
+    }
+
     result.innerHTML = '<div class="empty">Memeriksa data...</div>';
 
-    fetch(SCRIPT_URL + "?noReg=" + encodeURIComponent(noReg))
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "cek", noReg: noReg, nik: nik })
+    })
       .then(function (res) { return res.json(); })
       .then(function (json) {
         if (!json.found) {
-          result.innerHTML = '<div class="empty">Data untuk No. Reg tersebut belum ditemukan. Periksa kembali penulisan No. Reg, atau verifikasi kelengkapan belum diinput oleh petugas.</div>';
+          result.innerHTML = '<div class="empty">' + escapeHtml(json.message || "Data tidak ditemukan atau verifikasi tidak cocok.") + '</div>';
           return;
         }
         renderResult(json.data, json.history || [json.data]);
@@ -232,6 +248,12 @@
   }
 
   btnCek.addEventListener("click", cekStatus, false);
+  nikInput.addEventListener("input", function () {
+    nikInput.value = nikInput.value.replace(/\D/g, "").slice(0, 6);
+  }, false);
+  nikInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") cekStatus();
+  }, false);
   noRegInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter") cekStatus();
   }, false);
